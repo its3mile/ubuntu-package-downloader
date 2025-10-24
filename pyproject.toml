@@ -1,0 +1,44 @@
+[project]
+name = "ubuntu-package-downloader"
+version = "0.1.0"
+# dynamic = ["version"]
+description = "A command line utility to support downloading Ubuntu packages from Launchpad."
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.13"
+dependencies = [
+    "launchpad>=2.0.1",
+    "launchpadlib>=2.1.0",
+    "loguru>=0.7.3",
+    "pydantic-settings>=2.11.0",
+    "python-debian>=1.0.1",
+]
+authors = [
+    { name = "its3mile", email = "81533043+its3mile@users.noreply.github.com" },
+]
+license = "GPL-3.0"
+license-files = ["LICEN[CS]E.*"]
+
+[tool.ruff.lint]
+select = [
+    "D", # pydocstyle
+    "I", # isort
+]
+ignore = ["D1", "D200", "D202", "D203", "D205", "D212", "D400", "D415", "I001"]
+
+
+[tool.ruff.lint.isort]
+force-single-line = true
+default-section = "first-party"
+known-first-party = ["src"]
+
+[tool.settings]
+launchpad_service_root = "production"
+launchpad_version = "devel"
+launchpad_distrubution = "ubuntu"
+
+[build-system]
+requires = ["uv_build >= 0.9.5, <0.10.0"]
+build-backend = "uv_build"
+
+[project.scripts]
+ubuntu-package-downloader = "main:main"
