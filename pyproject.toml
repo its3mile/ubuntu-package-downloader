@@ -41,4 +41,4 @@ requires = ["uv_build >= 0.9.5, <0.10.0"]
 build-backend = "uv_build"
 
 [project.scripts]
-ubuntu-package-downloader = "main:main"
+ubuntu-package-downloader = "ubuntu_package_downloader:main"
