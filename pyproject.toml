@@ -1,7 +1,6 @@
 [project]
 name = "ubuntu-package-downloader"
 version = "0.1.0"
-# dynamic = ["version"]
 description = "A command line utility to support downloading Ubuntu packages from Launchpad."
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.13"
@@ -31,10 +30,10 @@ force-single-line = true
 default-section = "first-party"
 known-first-party = ["src"]
 
-[tool.settings]
-launchpad_service_root = "production"
-launchpad_version = "devel"
-launchpad_distribution = "ubuntu"
+[tool.settings.launchpad]
+service_root = "production"
+version = "devel"
+distribution = "ubuntu"
 
 [build-system]
 requires = ["uv_build >= 0.9.5, <0.10.0"]

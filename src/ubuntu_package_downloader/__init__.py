@@ -9,13 +9,16 @@ def main():
     """
     Process command line arguments and call ubuntu_package_downloader function
     """
+    # load settings
+    settings = Settings()
+
     parser = argparse.ArgumentParser(
-        prog="ubuntu-package-downloader", description="Download Ubuntu packages easily"
+        prog=settings.project.name, description=settings.project.description
     )
     parser.add_argument(
         "--version",
         action="version",
-        version="ubuntu-package-downloader 1.0.0",  # todo: make dynamic
+        version=f"{settings.project.name} {settings.project.version}",
     )
     parser.add_argument("name", type=str, help="Package to download")
     parser.add_argument(
@@ -36,7 +39,7 @@ def main():
         "-a",
         "--architecture",
         type=str,
-        help="Specify the architecutre of the package to download",
+        help="Specify the architecture of the package to download",
         default="amd64",
     )
     parser.add_argument(
@@ -52,20 +55,17 @@ def main():
         required=(
             "-w" in sys.argv and "--depth" in sys.argv
         ),  # only required if -w specified, and user specified it, so that default can be used
-        help="Set the dependency recursion depth",
+        help="Set the dependency recursion depth, defaults to 1",
     )
     # parse arguments
     args = parser.parse_args()
 
-    # load settings
-    settings = Settings()
-
     # get UbuntuPackageDownloader instance
     upd = UbuntuPackageDownloader(
-        settings.launchpad_consumer_name,
-        settings.launchpad_service_root,
-        settings.launchpad_version,
-        settings.launchpad_distribution,
+        settings.launchpad.consumer_name,
+        settings.launchpad.service_root,
+        settings.launchpad.version,
+        settings.launchpad.distribution,
     )
 
     # set recursion limit
