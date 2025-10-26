@@ -8,9 +8,12 @@
             "name": "Python Debugger: Current File with Arguments",
             "type": "debugpy",
             "request": "launch",
-            "program": "$P${workspaceFolder}/src/ubuntu_package_downloader/main.py",
+            // package is referred by its directory name i.e., _ instead of - to allow for local script execution & debugging
+            // for all other intents and purposes refer to it as ubuntu-package-downloader
+            "module": "ubuntu_package_downloader",
+            "args": "${command:pickArgs}",
             "console": "integratedTerminal",
-            "args": "${command:pickArgs}"
+            "justMyCode": true
         }
     ]
 }
