@@ -34,7 +34,7 @@ known-first-party = ["src"]
 [tool.settings]
 launchpad_service_root = "production"
 launchpad_version = "devel"
-launchpad_distrubution = "ubuntu"
+launchpad_distribution = "ubuntu"
 
 [build-system]
 requires = ["uv_build >= 0.9.5, <0.10.0"]
