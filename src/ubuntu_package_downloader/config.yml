@@ -1,0 +1,5 @@
+---
+launchpad:
+  service_root: production
+  version: devel
+  distribution: ubuntu

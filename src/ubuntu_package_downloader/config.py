@@ -4,9 +4,10 @@ from pydantic_settings import (
     BaseSettings,
     PydanticBaseSettingsSource,
     PyprojectTomlConfigSettingsSource,
+    YamlConfigSettingsSource
 )
 from uuid import uuid4
-
+from pathlib import Path
 
 class ProjectSettings(BaseSettings):
     """Project related settings."""
@@ -42,8 +43,8 @@ class LaunchpadSettings(BaseSettings):
     """Configuration settings for Ubuntu Package Downloader."""
 
     model_config = SettingsConfigDict(
-        pyproject_toml_depth=2,
-        pyproject_toml_table_header=("tool", "settings", "launchpad"),
+        yaml_file=Path(__file__).parent / "config.yml",
+        yaml_config_section="launchpad",
     )
 
     @classmethod
@@ -58,14 +59,14 @@ class LaunchpadSettings(BaseSettings):
         return (
             env_settings,
             dotenv_settings,
-            PyprojectTomlConfigSettingsSource(settings_cls),
+            YamlConfigSettingsSource(settings_cls),
             init_settings,
         )
 
     consumer_name: str = Field(frozen=True, default=str(uuid4()))
-    service_root: str = Field(frozen=True, default="production")
-    version: str = Field(frozen=True, default="devel")
-    distribution: str = Field(frozen=True, default="ubuntu")
+    service_root: str = Field(frozen=True)
+    version: str = Field(frozen=True)
+    distribution: str = Field(frozen=True)
 
 
 class Settings(BaseSettings):

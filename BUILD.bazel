@@ -1,0 +1,64 @@
+load("@rules_pkg//pkg:pkg.bzl", "pkg_deb")
+
+# metdata
+# todo: dynamically pull from pyproject.toml
+PACKAGE_NAME = "ubuntu_package_downloader"
+
+PACKAGE_VERSION = "0.1.0"
+
+MAINTAINER = "its3mile <81533043+its3mile@users.noreply.github.com>"
+
+DESCRIPTION = "A command line utility to support downloading Ubuntu packages from Launchpad."
+
+# Build the wheel
+genrule(
+    name = "wheel",
+    srcs = glob([
+        "src/**/*.py",
+    ]) + [
+        "src/{package}/config.yml".format(package = PACKAGE_NAME),
+        "pyproject.toml",
+        "README.md",
+        "LICENCE",
+    ],
+    outs = [
+        "{package}-{version}-py3-none-any.whl".format(
+            package = PACKAGE_NAME,
+            version = PACKAGE_VERSION,
+        ),
+    ],
+    cmd = """
+        set -e
+        uv build --no-cache # cache is managed by bazel
+        cp dist/{package}-{version}-py3-none-any.whl $@
+    """.format(
+        package = PACKAGE_NAME,
+        version = PACKAGE_VERSION,
+    ),
+)
+
+# Install the wheel into a temporary directory for debian packaging and create the data segment tar
+genrule(
+    name = "deb_data_segment",
+    srcs = [":wheel"],
+    outs = ["deb_data_segment.tar"],
+    cmd = """
+        set -e
+        mkdir -p DEBIAN
+        pip install $(location :wheel) \
+            --root DEBIAN/ \
+            --prefix /usr \
+            --no-deps
+        tar -cf $@ -C DEBIAN .
+    """.format(package = PACKAGE_NAME.replace("_", "-")),
+)
+
+# Create the Debian package using the metadata and data tar
+pkg_deb(
+    name = "deb_package",
+    data = ":deb_data_segment",
+    description = DESCRIPTION,
+    maintainer = MAINTAINER,
+    package = PACKAGE_NAME.replace("_", "-"),
+    version = PACKAGE_VERSION,
+)
