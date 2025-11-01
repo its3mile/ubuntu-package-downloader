@@ -34,9 +34,9 @@ class ProjectSettings(BaseSettings):
             init_settings,
         )
 
-    name: str = Field(frozen=True)
-    version: str = Field(frozen=True)
-    description: str = Field(frozen=True)
+    name: str = Field(frozen=True, default="ubuntu-package-downloader")
+    version: str = Field(frozen=True, default="0.0.0")
+    description: str = Field(frozen=True, default="A command line utility to support downloading Ubuntu packages from Launchpad.")
 
 
 class LaunchpadSettings(BaseSettings):
