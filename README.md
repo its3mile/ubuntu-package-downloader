@@ -19,7 +19,7 @@ This is useful if working in on a ubuntu host in a non-internet connected enviro
 
 Simply specify the package to download:
 
-```
+```bash
 ubuntu-package-downloader xclip
 ```
 
@@ -27,13 +27,13 @@ This will download the latest version of the xclip (amd64) debian (.deb) package
 
 To download a package and its immediate dependencies:
 
-```
+```bash
 ubuntu-package-downloader xclip -w
 ```
 
 To download a package, with its dependencies, and the dependencies dependencies:
 
-```
+```bash
 ubuntu-package-downloader xclip -w --depth 2
 ```
 
@@ -41,7 +41,7 @@ You can see where this is going...
 
 Specific package versions, architectures, series, and whether the packages dependencies should be downloaded can also be specified. for this see the tool help:
 
-```
+```bash
 ubuntu-package-downloader --help
 ```
 
@@ -49,6 +49,16 @@ ubuntu-package-downloader --help
 
 - Python >= 3.13 (see [pyproject.toml](pyproject.toml) for declared runtime and dependencies).
 - This project aims to keep a minimal dependency set. Dependencies are listed in [pyproject.toml](pyproject.toml).
+
+## Install (user)
+
+Installing the python wheel is the simplest way to go:
+
+```bash
+pip install --user --break-system-packages ubuntu_package_downloader_<version>_py3-none-any.whl
+```
+
+Installing for the user should prevent any mishaps with system packages, but you may still want to install this in a virtual environment, i.e., with `uv tool install` for a managed experience or `virtualenv` for a manual experience.
 
 ## Install (developer)
 
@@ -62,7 +72,7 @@ Installing it as a package for local testing is as simple as running `uv tool in
 
 Uninstall the local package is as simple as running `uv tool uninstall ubuntu-package-downloader`.
 
-# Credit
+## Credit
 
 This project is essentially a refactor of https://github.com/canonical/ubuntu-package-download, canonical's first party tool. Credit to Canonical and authors. This tool extends the same license.
 
