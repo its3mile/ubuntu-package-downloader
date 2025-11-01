@@ -4,6 +4,8 @@ import sys
 from .config import Settings
 from .ubuntu_package_downloader import UbuntuPackageDownloader
 
+SUCCESS = 0
+ERROR = 1
 
 def main():
     """
@@ -71,10 +73,10 @@ def main():
     # set recursion limit
     upd.recursion_limit = args.depth
 
-    return upd.download(
+    return sys.exit(SUCCESS) if upd.download(
         package_name=args.name,
         package_version=args.package_version,
         distribution_series=args.distribution_series,
         architecture=args.architecture,
         with_dependencies=args.with_dependencies,
-    )
+    ) else sys.exit(ERROR)
