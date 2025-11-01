@@ -1,0 +1,41 @@
+name: Python package
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # All supported python versions (at time of writing)
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+
+    steps:
+    # Checkout source
+    - uses: actions/checkout@v4
+
+    # Install latest uv
+    - uses: astral-sh/setup-uv@v1
+      with:
+        version: "latest"
+    
+    # Setup python version(s)
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    # Install the package as a uv tool
+    - name: Install tool 
+      run: |
+        uv tool install -p ${{ matrix.python-version }} .
+
+    # Run the tool to download a package
+    - name: Run script
+      run: |
+        ubuntu-package-downloader xclip
