@@ -1,0 +1,38 @@
+name: Python package release
+
+on:
+  push:
+    tags: [ "[0-9].[0-9].[0-9]" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout source
+      - uses: actions/checkout@v4
+
+      # Install latest uv
+      - uses: astral-sh/setup-uv@v1
+        with:
+          version: "latest"
+
+      # Create virtual environment
+      - run: uv sync
+      
+      # Get the release version identifier from the tag
+      - run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
+      # Bump the version in the pyproject.toml to the tag version
+      - run: uv version "${RELEASE_VERSION}"
+      
+      # Build the release with the source and wheel distributions
+      - run: uv build --sdist --wheel
+
+      # Create a GitHub release
+      - uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'tag'
+        with:
+          files: |
+            dist/ubuntu_package_downloader-${{ env.RELEASE_VERSION }}-py3-none-any.whl
+            dist/ubuntu_package_downloader-${{ env.RELEASE_VERSION }}.tar.gz
+          token: ${{ secrets.CI_CREATE_RELEASE_PAT }}
