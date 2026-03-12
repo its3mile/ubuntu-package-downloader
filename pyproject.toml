@@ -14,8 +14,8 @@ dependencies = [
 authors = [
   { name = "its3mile", email = "81533043+its3mile@users.noreply.github.com" },
 ]
-license = "GPL-3.0"
-license-files = ["LICEN[CS]E.*"]
+license = "GPL-3.0-only"
+license-files = ["LICENCE"]
 
 [tool.ruff.lint]
 select = [
@@ -35,3 +35,4 @@ build-backend = "uv_build"
 
 [project.scripts]
 ubuntu-package-downloader = "ubuntu_package_downloader.__main__:main"
+upd = "ubuntu_package_downloader.__main__:main"
