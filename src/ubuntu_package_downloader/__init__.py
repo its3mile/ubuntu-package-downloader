@@ -1,3 +1,4 @@
+import concurrent
 import sys
 
 import click
@@ -65,14 +66,16 @@ def main(
     # set recursion limit
     upd.recursion_limit = depth
 
-    return (
-        sys.exit(SUCCESS)
-        if upd.download(
-            package_name=name,
-            package_version=package_version,
-            distribution_series=distribution_series,
-            architecture=architecture,
-            with_dependencies=True if depth > 0 else False,
+    result = None
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+        future = executor.submit(
+            upd.download,
+            name,
+            package_version,
+            distribution_series,
+            architecture,
+            True if depth > 0 else False,
         )
-        else sys.exit(ERROR)
-    )
+        result = future.result()
+
+    return sys.exit(SUCCESS) if result else sys.exit(ERROR)
