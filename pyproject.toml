@@ -31,7 +31,7 @@ default-section = "first-party"
 known-first-party = ["src"]
 
 [build-system]
-requires = ["uv_build >= 0.9.5, <0.10.0"]
+requires = ["uv_build>=0.9.5,<=0.11.7"]
 build-backend = "uv_build"
 
 [project.scripts]
